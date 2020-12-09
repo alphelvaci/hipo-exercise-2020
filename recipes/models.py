@@ -15,7 +15,7 @@ class Ingredient(models.Model):
 class Recipe(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='static/images/%Y/%m/')
+    image = models.ImageField(upload_to='%Y/%m/')
     instructions = models.TextField()
     difficulty_choices = [
         ("easy", "Easy"),
