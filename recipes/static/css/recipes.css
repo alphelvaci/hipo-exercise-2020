@@ -3,13 +3,16 @@
     margin-top: 0;
     padding: 20px 20px 20px 63px;
 }
+
 .page-header h1 a {
     color: #ffffff;
 }
+
 .page-sidebar {
     float: right;
     padding-right: 60px;
 }
+
 .sidebar-search {
     margin-bottom: 20px;
     border-style: solid;
@@ -19,9 +22,11 @@
     padding-bottom: 10px;
     padding-left: 10px;
 }
+
 .sidebar-search input {
     border-color: #8456b34d;
 }
+
 .sidebar-ingredients {
     width: 250px;
     border-style: solid;
@@ -29,13 +34,16 @@
     border-width: 2px;
     border-color: #8456b34d;
 }
+
 .sidebar-ingredients h4 {
     padding-left: 10px;
 }
+
 .page-content {
     padding-left: 60px;
     min-height: calc(100% - 263px);
 }
+
 .recipe-container {
     width: 700px;
     margin-bottom: 20px;
@@ -45,27 +53,34 @@
     border-width: 2px;
     border-color: #8456b34d;
 }
+
 .recipe {
     padding-left: 20px;
 }
+
 .recipe h2 {
     display: inline-block;
 }
+
 .recipe img {
     height: 200px;
     padding-left: 2px;
     border-radius: 10px;
 }
+
 .recipe h4 {
     padding-left: 3px;
 }
+
 .recipe p {
     padding-left: 10px;
     width: 500px;
 }
+
 .recipe ul {
     padding-left: 26px;
 }
+
 .page-navigation {
     background-color: #7356ad;
     text-align: center;
@@ -73,18 +88,22 @@
     padding-bottom: 30px;
     float: bottom;
 }
+
 .page-navigation .nav-buttons-inner {
     margin-right: 25px;
     margin-left: 25px;
 }
+
 .page-navigation .nav-buttons-outer {
     margin-right: 10px;
     margin-left: 10px;
 }
+
 .page-navigation p {
     font-size: 13pt;
     display: inline;
 }
+
 .page-navigation a {
     font-size: 13pt;
     color: #ffffff;

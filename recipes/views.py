@@ -1,25 +1,26 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from .models import Ingredient, Recipe
 from django.db.models import Count
 
+
 def index(request):
-    #get the html GET parameters
-    try:
+    # get the html GET parameters
+    if 'page' in request.GET:
         page = int(request.GET['page'])
-    except:
+    else:
         page = 1
-    try:
+    if 'ingredient' in request.GET:
         filter_ingredient = request.GET['ingredient']
         filtered = True
-    except:
+    else:
         filter_ingredient = None
         filtered = False
-    try:
+    if 'search' in request.GET:
         search = int(request.GET['search'])
         searched = True
-    except:
+    else:
         search = None
+        searched = False
 
     if filtered:
         recipes = Recipe.objects.filter(ingredients__name=filter_ingredient).order_by('-date')[(page-1)*3:page*3]
@@ -31,31 +32,40 @@ def index(request):
     for recipe in recipes:
         recipe.instructions = recipe.instructions.split('\r\n')
 
-    if recipe_count%3 == 0:
-        last_page = recipe_count//3
+    if recipe_count % 3 == 0:
+        last_page = recipe_count // 3
     else:
-        last_page = (recipe_count//3)+1
+        last_page = (recipe_count // 3) + 1
 
-    if page-1 < 1:
+    if page - 1 < 1:
         prev_page = 1
     else:
-        prev_page = page-1
-    if page+1 > last_page:
+        prev_page = page - 1
+    if page + 1 > last_page:
         next_page = last_page
     else:
-        next_page = page+1
+        next_page = page + 1
 
-    if page-3 < 1:
+    if page - 3 < 1:
         range_start = 1
     else:
-        range_start = page+5
-    if page+5 > last_page:
-        range_end = last_page+1
+        range_start = page + 5
+    if page + 5 > last_page:
+        range_end = last_page + 1
     else:
-        range_end = page-3
+        range_end = page - 3
     page_range = range(range_start, range_end)
 
-    return render(request, 'recipes/index.html',
-    {'recipes': recipes, 'ingredients': ingredients, 'page': page,
-    'page_range': page_range, 'prev_page': prev_page, 'next_page': next_page,
-    'last_page': last_page, 'filter_ingredient': filter_ingredient})
+    return render(
+        request, 'recipes/index.html',
+        {
+            'recipes': recipes,
+            'ingredients': ingredients,
+            'page': page,
+            'page_range': page_range,
+            'prev_page': prev_page,
+            'next_page': next_page,
+            'last_page': last_page,
+            'filter_ingredient': filter_ingredient
+        }
+    )
