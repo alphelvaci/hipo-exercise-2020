@@ -1,0 +1,75 @@
+{% load static %}
+<html>
+    <head>
+        <title>Home - Recipes</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="{% static 'css/recipes.css' %}">
+    </head>
+    <body>
+        <div class="page-header">
+            <h1><a href="/">Recipes</a></h1>
+            {% if page > 1 %}
+            <h4>Page: {{ page }}</h4>
+            {% endif %}
+        </div>
+
+        <div class="page-sidebar">
+            <div class="sidebar-search">
+                <h4>Search</h4>
+                <input type="text">
+                <button>Go</button>
+            </div>
+            <div class="sidebar-ingredients">
+                <h4>Most Used Ingredients</h4>
+                <ol>
+                    {% for ingredient in ingredients %}
+                        <li><a href="/">
+                            {{ ingredient.name }}
+                            ({{ ingredient.use_count }})
+                        </a></li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+
+        <div class="page-content">
+            {% for recipe in recipes %}
+                <div class="recipe-container">
+                    <div class="recipe">
+                        <h2>{{ recipe.title }}</h2>
+                        {{ recipe.date.date }}
+                        by {{ recipe.author }}<br>
+                        <img src="{{ recipe.image.url }}">
+                        <h4>Difficulty:</h4>
+                        <p>{{ recipe.difficulty }}</p>
+                        <h4>Ingredients:</h4>
+                        <ul>
+                            {% for ingredient in recipe.ingredients.all %}
+                                <li>{{ ingredient }}</li>
+                            {% endfor %}
+                        </ul>
+                        <h4>Instructions:</h4>
+                        {% for line in recipe.instructions %}
+                            <p>{{ line }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="page-navigation">
+            <a class="nav-buttons-outer" href="/">First</a>
+            <a class="nav-buttons-inner" href="/?page={{ prev_page }}">Previous</a>
+            {% for i in page_range %}
+                {% if i == page %}
+                    <p>{{ i }}</p>
+                {% else %}
+                    <a href="/?page={{ i }}">{{ i }}</a>
+                {% endif %}
+            {% endfor %}
+            <a class="nav-buttons-inner" href="/?page={{ next_page }}">Next</a>
+            <a class="nav-buttons-outer" href="/?page={{ last_page }}">Last</a>
+        </div>
+    </body>
+</html>
