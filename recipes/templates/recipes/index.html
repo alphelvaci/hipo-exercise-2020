@@ -9,7 +9,10 @@
     <body>
         <div class="page-header">
             <h1><a href="/">Recipes</a></h1>
-            {% if page > 1 %}
+            {% if filter_ingredient %}
+                <h4>Filter By: {{ filter_ingredient }}</h4>
+            {% endif %}
+                {% if page > 1 %}
             <h4>Page: {{ page }}</h4>
             {% endif %}
         </div>
@@ -24,7 +27,7 @@
                 <h4>Most Used Ingredients</h4>
                 <ol>
                     {% for ingredient in ingredients %}
-                        <li><a href="/">
+                        <li><a href="/?ingredient={{ ingredient.name }}">
                             {{ ingredient.name }}
                             ({{ ingredient.use_count }})
                         </a></li>
@@ -59,8 +62,13 @@
         </div>
 
         <div class="page-navigation">
-            <a class="nav-buttons-outer" href="/">First</a>
-            <a class="nav-buttons-inner" href="/?page={{ prev_page }}">Previous</a>
+            {% if filter_ingredient %}
+                <a class="nav-buttons-outer" href="/?ingredient={{ filter_ingredient }}">First</a>
+                <a class="nav-buttons-inner" href="/?ingredient={{ filter_ingredient }}&page={{ prev_page }}">Previous</a>
+            {% else %}
+                <a class="nav-buttons-outer" href="/">First</a>
+                <a class="nav-buttons-inner" href="/?page={{ prev_page }}">Previous</a>
+            {% endif %}
             {% for i in page_range %}
                 {% if i == page %}
                     <p>{{ i }}</p>
@@ -68,8 +76,13 @@
                     <a href="/?page={{ i }}">{{ i }}</a>
                 {% endif %}
             {% endfor %}
-            <a class="nav-buttons-inner" href="/?page={{ next_page }}">Next</a>
-            <a class="nav-buttons-outer" href="/?page={{ last_page }}">Last</a>
+            {% if filter_ingredient %}
+                <a class="nav-buttons-inner" href="/?ingredient={{ filter_ingredient }}&page={{ next_page }}">Next</a>
+                <a class="nav-buttons-outer" href="/?ingredient={{ filter_ingredient }}&page={{ last_page }}">Last</a>
+            {% else %}
+                <a class="nav-buttons-inner" href="/?page={{ next_page }}">Next</a>
+                <a class="nav-buttons-outer" href="/?page={{ last_page }}">Last</a>
+            {% endif %}
         </div>
     </body>
 </html>

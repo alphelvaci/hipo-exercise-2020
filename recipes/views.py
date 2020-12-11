@@ -10,16 +10,32 @@ def index(request):
     except:
         page = 1
     try:
-        ingredient = int(request.GET['ingredient'])
+        filter_ingredient = request.GET['ingredient']
+        filtered = True
     except:
-        ingredient = None
+        filter_ingredient = None
+        filtered = False
     try:
         search = int(request.GET['search'])
+        searched = True
     except:
         search = None
 
-    
-    last_page = (Recipe.objects.all().count()//3)+1
+    if filtered:
+        recipes = Recipe.objects.filter(ingredients__name=filter_ingredient).order_by('-date')[(page-1)*3:page*3]
+        recipe_count = Recipe.objects.filter(ingredients__name=filter_ingredient).count()
+    else:
+        recipes = Recipe.objects.order_by('-date')[(page-1)*3:page*3]
+        recipe_count = Recipe.objects.count()
+    ingredients = Ingredient.objects.annotate(count=Count('recipe')).order_by('-count')[:5]
+    for recipe in recipes:
+        recipe.instructions = recipe.instructions.split('\r\n')
+
+    if recipe_count%3 == 0:
+        last_page = recipe_count//3
+    else:
+        last_page = (recipe_count//3)+1
+
     if page-1 < 1:
         prev_page = 1
     else:
@@ -38,13 +54,8 @@ def index(request):
     else:
         range_end = page-3
     page_range = range(range_start, range_end)
-    
-    recipes = Recipe.objects.order_by('-date')[(page-1)*3:page*3]
-    ingredients = Ingredient.objects.all().annotate(count=Count('recipe')).order_by('-count')[:5]
-    for recipe in recipes:
-        recipe.instructions = recipe.instructions.split('\r\n')
-    
+
     return render(request, 'recipes/index.html',
     {'recipes': recipes, 'ingredients': ingredients, 'page': page,
     'page_range': page_range, 'prev_page': prev_page, 'next_page': next_page,
-    'last_page': last_page})
+    'last_page': last_page, 'filter_ingredient': filter_ingredient})
