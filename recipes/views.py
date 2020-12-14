@@ -81,5 +81,6 @@ def index(request):
             'filter_ingredient': filter_ingredient,
             'search_form': SearchForm,
             'search_keyword': search_keyword,
+            'user': request.user,
         }
     )
