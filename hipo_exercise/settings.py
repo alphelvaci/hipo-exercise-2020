@@ -3,7 +3,7 @@ Django settings for hipo_exercise project.
 """
 import os
 from pathlib import Path
-from hipo_exercise.secrets import SECRET_KEY
+from hipo_exercise.secrets import SECRET_KEY, DB_USERNAME, DB_PASSWORD, DB_HOST, DB_PORT
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -61,8 +61,12 @@ WSGI_APPLICATION = 'hipo_exercise.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'hipo-exercise',
+        'USER': DB_USERNAME,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
+        'PORT': DB_PORT,
     }
 }
 
