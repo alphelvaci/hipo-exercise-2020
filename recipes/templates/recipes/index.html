@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="{% static 'css/recipes.css' %}">
     </head>
-    <body>
+    <body class="body">
         <div class="page-header">
             <h1><a href="/">Recipes</a></h1>
             {% if filter_ingredient %}
@@ -16,48 +16,50 @@
                 <h4>Page: {{ page }}</h4>
             {% endif %}
         </div>
-        <div class="page-sidebar">
-            <div class="sidebar-search">
-                <h4>Search</h4>
-                <input type="text">
-                <button>Go</button>
-            </div>
-            <div class="sidebar-ingredients">
-                <h4>Most Used Ingredients</h4>
-                <ol>
-                    {% for ingredient in ingredients %}
-                        <li><a href="/?ingredient={{ ingredient.name }}">
-                            {{ ingredient.name }}
-                            ({{ ingredient.use_count }})
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ol>
-            </div>
-        </div>
         <div class="page-content">
-            {% for recipe in recipes %}
-                <div class="recipe-container">
-                    <div class="recipe">
-                        <h2>{{ recipe.title }}</h2>
-                        {{ recipe.date.date }}
-                        by {{ recipe.author }}<br>
-                        <img src="{{ recipe.image.url }}">
-                        <h4>Difficulty:</h4>
-                        <p>{{ recipe.difficulty }}</p>
-                        <h4>Ingredients:</h4>
-                        <ul>
-                            {% for ingredient in recipe.ingredients.all %}
-                                <li>{{ ingredient }}</li>
-                            {% endfor %}
-                        </ul>
-                        <h4>Instructions:</h4>
-                        {% for line in recipe.instructions %}
-                            <p>{{ line }}</p>
-                        {% endfor %}
-                    </div>
+            <div class="page-sidebar">
+                <div class="sidebar-search">
+                    <h4>Search</h4>
+                    <input type="text">
+                    <button>Go</button>
                 </div>
-            {% endfor %}
+                <div class="sidebar-ingredients">
+                    <h4>Most Used Ingredients</h4>
+                    <ol>
+                        {% for ingredient in ingredients %}
+                            <li><a href="/?ingredient={{ ingredient.name }}">
+                                {{ ingredient.name }}
+                                ({{ ingredient.use_count }})
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+            <div class="recipes-container">
+                {% for recipe in recipes %}
+                    <div class="single-recipe-container">
+                        <div class="recipe">
+                            <h2>{{ recipe.title }}</h2>
+                            {{ recipe.date.date }}
+                            by {{ recipe.author }}<br>
+                            <img src="{{ recipe.image.url }}">
+                            <h4>Difficulty:</h4>
+                            <p>{{ recipe.difficulty }}</p>
+                            <h4>Ingredients:</h4>
+                            <ul>
+                                {% for ingredient in recipe.ingredients.all %}
+                                    <li>{{ ingredient }}</li>
+                                {% endfor %}
+                            </ul>
+                            <h4>Instructions:</h4>
+                            {% for line in recipe.instructions %}
+                                <p>{{ line }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
         <div class="page-navigation">
             {% if filter_ingredient %}
