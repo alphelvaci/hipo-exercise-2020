@@ -57,6 +57,21 @@
     padding-left: 10px;
 }
 
+.sidebar-post {
+    margin-top: 20px;
+    height: 50px;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: #8456b34d;
+    display:flex;
+    align-items:center;
+}
+
+.sidebar-post a {
+    margin-left: 10px;
+}
+
 .recipes-container {
     padding-left: 60px;
 }

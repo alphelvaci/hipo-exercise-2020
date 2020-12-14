@@ -1,0 +1,26 @@
+{% load static %}
+<html>
+    <head>
+        <title>Share - Recipes</title>
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="{% static 'css/post_recipe.css' %}">
+    </head>
+    <body>
+        <div class="page-header">
+            <h1><a href="/">Recipes</a></h1>
+            <h4>Share a new recipe:</h4>
+        </div>
+        <div class="form-container">
+            <form method="POST" class="recipe-form" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form %}
+                    <h4>{{ field.label }}:</h4>
+                    {{ field }}
+                {% endfor %} <br>
+                <button type="submit" class="save-button">Save</button>
+            </form>
+        </div>
+    </body>
+</html>

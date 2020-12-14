@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .models import Ingredient, Recipe
 from django.db.models import Count
 from .forms import RecipeForm, SearchForm
+from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -84,3 +86,18 @@ def index(request):
             'user': request.user,
         }
     )
+
+
+@login_required
+def post_recipe(request):
+    if request.method == "POST":
+        form = RecipeForm(request.POST, request.FILES)
+        if form.is_valid():
+            recipe = form.save(commit=False)
+            recipe.author = request.user
+            recipe.date = timezone.now()
+            recipe.save()
+            return redirect('/')
+    else:
+        form = RecipeForm()
+    return render(request, 'recipes/post_recipe.html', {'form': form})
