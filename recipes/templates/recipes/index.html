@@ -9,6 +9,9 @@
     <body class="body">
         <div class="page-header">
             <h1><a href="/">Recipes</a></h1>
+            {% if search_keyword %}
+                <h4>Search By: {{ search_keyword }}</h4>
+            {% endif %}
             {% if filter_ingredient %}
                 <h4>Filter By: {{ filter_ingredient }}</h4>
             {% endif %}
@@ -20,8 +23,13 @@
             <div class="page-sidebar">
                 <div class="sidebar-search">
                     <h4>Search</h4>
-                    <input type="text">
-                    <button>Go</button>
+                    <form method="POST" class="search-form">
+                        {% csrf_token %}
+                        {% for field in search_form %}
+                            {{ field }}
+                        {% endfor %}
+                        <button type="submit">Go</button>
+                    </form>
                 </div>
                 <div class="sidebar-ingredients">
                     <h4>Most Used Ingredients</h4>

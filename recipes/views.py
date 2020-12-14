@@ -1,9 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Ingredient, Recipe
 from django.db.models import Count
+from .forms import RecipeForm, SearchForm
 
 
 def index(request):
+    if request.method == "POST":
+        return redirect('/?search_keyword=' + request.POST['search_keyword'])
+
     # get the html GET parameters
     if 'page' in request.GET:
         page = int(request.GET['page'])
@@ -15,16 +19,24 @@ def index(request):
     else:
         filter_ingredient = None
         filtered = False
-    if 'search' in request.GET:
-        search = int(request.GET['search'])
+    if 'search_keyword' in request.GET:
+        search_keyword = request.GET['search_keyword']
         searched = True
     else:
-        search = None
+        search_keyword = None
         searched = False
 
     if filtered:
         recipes = Recipe.objects.filter(ingredients__name=filter_ingredient).order_by('-date')[(page-1)*3:page*3]
         recipe_count = Recipe.objects.filter(ingredients__name=filter_ingredient).count()
+    elif searched:
+        author_matches = Recipe.objects.filter(author__username__unaccent__icontains=search_keyword)
+        title_matches = Recipe.objects.filter(title__unaccent__icontains=search_keyword)
+        instruction_matches = Recipe.objects.filter(instructions__unaccent__icontains=search_keyword)
+        difficulty_matches = Recipe.objects.filter(difficulty__unaccent__icontains=search_keyword)
+        ingredient_matches = Recipe.objects.filter(ingredients__name__unaccent__icontains=search_keyword)
+        recipes = (author_matches | title_matches | instruction_matches | difficulty_matches | ingredient_matches).distinct()[(page-1)*3:page*3]
+        recipe_count = (author_matches | title_matches | instruction_matches | difficulty_matches | ingredient_matches).distinct().count()
     else:
         recipes = Recipe.objects.order_by('-date')[(page-1)*3:page*3]
         recipe_count = Recipe.objects.count()
@@ -66,6 +78,8 @@ def index(request):
             'prev_page': prev_page,
             'next_page': next_page,
             'last_page': last_page,
-            'filter_ingredient': filter_ingredient
+            'filter_ingredient': filter_ingredient,
+            'search_form': SearchForm,
+            'search_keyword': search_keyword,
         }
     )
