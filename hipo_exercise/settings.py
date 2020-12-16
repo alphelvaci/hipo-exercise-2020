@@ -116,6 +116,7 @@ AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 AWS_STORAGE_BUCKET_NAME = 'cdn.hipo-exercise.alphelvaci.com'
 AWS_S3_CUSTOM_DOMAIN = 'cdn.hipo-exercise.alphelvaci.com.s3.amazonaws.com'
 AWS_S3_USE_SSL = False
+AWS_S3_SECURE_URLS = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
