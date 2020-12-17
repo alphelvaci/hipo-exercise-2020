@@ -64,8 +64,15 @@
                     <div class="single-recipe-container">
                         <div class="recipe">
                             <h2><a href="/recipe_detail?recipe={{ recipe.id }}">{{ recipe.title }}</a></h2>
-                            {{ recipe.date.date }}
-                            by {{ recipe.author }}<br>
+                            <div class="date-author">
+                                {{ recipe.date.date }}
+                                by {{ recipe.author }}
+                            </div>
+                            {% if user == recipe.author %}
+                                <a href="/post_recipe?recipe={{ recipe.id }}">Edit</a><br>
+                            {% else %}
+                                <br>
+                            {% endif %}
                             <a href="/recipe_detail?recipe={{ recipe.id }}"><img src="{{ recipe.image.url }}"></a>
                             <h4>Difficulty:</h4>
                             <p>{{ recipe.difficulty }}</p>

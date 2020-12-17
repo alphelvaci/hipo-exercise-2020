@@ -91,8 +91,15 @@ def recipe_detail(request):
 
 @login_required
 def post_recipe(request):
+    edit_mode = False
+    recipe = None
     if request.method == "POST":
-        form = RecipeForm(request.POST, request.FILES)
+        if request.POST['edit_mode'] == 'True':
+            recipe_id = int(request.POST['recipe'])
+            recipe = Recipe.objects.get(pk=recipe_id)
+            form = RecipeForm(request.POST, request.FILES, instance=recipe)
+        else:
+            form = RecipeForm(request.POST, request.FILES)
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.author = request.user
@@ -100,6 +107,18 @@ def post_recipe(request):
             recipe.save()
             form.save_m2m()
             return redirect('/')
+    elif 'recipe' in request.GET:
+        recipe_id = int(request.GET['recipe'])
+        recipe = Recipe.objects.get(pk=recipe_id)
+        form = RecipeForm(instance=recipe)
+        edit_mode = True
     else:
         form = RecipeForm()
-    return render(request, 'recipes/post_recipe.html', {'form': form})
+    return render(
+        request, 'recipes/post_recipe.html',
+        {
+            'form': form,
+            'edit_mode': edit_mode,
+            'recipe': recipe,
+        }
+    )
