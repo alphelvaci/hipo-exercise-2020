@@ -97,6 +97,7 @@ def post_recipe(request):
             recipe.author = request.user
             recipe.date = timezone.now()
             recipe.save()
+            form.save_m2m()
             return redirect('/')
     else:
         form = RecipeForm()
