@@ -67,6 +67,28 @@ def index(request):
     )
 
 
+def recipe_detail(request):
+    if request.method == "POST":
+        return redirect('/?search_keyword=' + request.POST['search_keyword'])
+
+    if 'recipe' in request.GET:
+        recipe_id = int(request.GET['recipe'])
+        recipe = Recipe.objects.get(pk=recipe_id)
+        recipe.instructions = recipe.instructions.split('\r\n')
+        ingredients = Ingredient.objects.annotate(count=Count('recipe')).order_by('-count')[:5]
+    else:
+        return render(request, '404.html')
+
+    return render(
+        request, 'recipes/recipe_detail.html',
+        {
+            'recipe': recipe,
+            'ingredients': ingredients,
+            'search_form': SearchForm,
+        }
+    )
+
+
 @login_required
 def post_recipe(request):
     if request.method == "POST":
