@@ -10,11 +10,17 @@
     <body>
         <div class="page-header">
             <h1><a href="/">Recipes</a></h1>
-            <h4>Share a new recipe:</h4>
+            {% if edit_mode %}
+                <h4>Edit recipe:</h4>
+            {% else %}
+                <h4>Share a new recipe:</h4>
+            {% endif %}
         </div>
         <div class="form-container">
             <form method="POST" class="recipe-form" enctype="multipart/form-data">
                 {% csrf_token %}
+                <input hidden type='text' name='edit_mode' value="{{ edit_mode }}"/>
+                <input hidden type='text' name='recipe' value="{{ recipe.id }}"/>
                 {% for field in form %}
                     <h4>{{ field.label }}:</h4>
                     {{ field }}
