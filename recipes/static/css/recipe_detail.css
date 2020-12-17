@@ -93,6 +93,12 @@
     display: inline-block;
 }
 
+.recipe .date-author {
+    display: inline;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 .recipe img {
     height: 200px;
     padding-left: 2px;
