@@ -78,7 +78,6 @@
 
 .single-recipe-container {
     width: calc(100% - 320px);
-    min-width: 370px;
     max-width: 700px;
     margin-bottom: 20px;
     padding-bottom: 10px;
@@ -90,6 +89,7 @@
 
 .recipe {
     padding-left: 20px;
+    padding-right: 20px;
 }
 
 .recipe h2 {
@@ -107,8 +107,9 @@
 }
 
 .recipe img {
-    height: 200px;
-    padding-left: 2px;
+    width: 100%;
+    max-width: 400px;
+    margin-left: 2px;
     border-radius: 10px;
 }
 
@@ -118,7 +119,6 @@
 
 .recipe p {
     padding-left: 10px;
-    width: 500px;
 }
 
 .recipe ul {
