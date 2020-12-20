@@ -1,0 +1,24 @@
+.page-header {
+    background-color: #7356ad;
+    margin-top: 0;
+    padding: 20px 20px 20px 63px;
+}
+
+.page-header h1 a {
+    color: #ffffff;
+}
+
+.not-found-container {
+    margin: auto;
+    margin-top: 150px;
+    text-align: center;
+}
+
+.not-found-container h1 {
+    color: #7356ad;
+    font-size: 100px;
+}
+
+.not-found-container h2 {
+    color: #7356ad;
+}
