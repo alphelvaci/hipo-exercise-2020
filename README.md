@@ -56,4 +56,4 @@
   ```shell
   ./install.sh
   ```
-  
+  ![](gifs/install.gif)
