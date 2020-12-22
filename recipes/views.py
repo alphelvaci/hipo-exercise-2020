@@ -25,12 +25,14 @@ def index(request):
         recipes = Recipe.objects.filter(ingredients__name=filter_ingredient).order_by('-date')[(page-1)*3:page*3]
         recipe_count = Recipe.objects.filter(ingredients__name=filter_ingredient).count()
     elif 'search_keyword' in request.GET:  # search
+        # get all the possible matches
         search_keyword = request.GET['search_keyword']
         author_matches = Recipe.objects.filter(author__username__unaccent__icontains=search_keyword)
         title_matches = Recipe.objects.filter(title__unaccent__icontains=search_keyword)
         instruction_matches = Recipe.objects.filter(instructions__unaccent__icontains=search_keyword)
         difficulty_matches = Recipe.objects.filter(difficulty__unaccent__icontains=search_keyword)
         ingredient_matches = Recipe.objects.filter(ingredients__name__unaccent__icontains=search_keyword)
+        # combine all the matches with the OR operator. use .distinct() to avoid duplicates
         recipes = (author_matches | title_matches | instruction_matches | difficulty_matches | ingredient_matches).distinct().order_by('-date')[(page-1)*3:page*3]
         recipe_count = (author_matches | title_matches | instruction_matches | difficulty_matches | ingredient_matches).distinct().count()
     else:
@@ -93,20 +95,27 @@ def recipe_detail(request):
 def post_recipe(request):
     edit_mode = False
     recipe = None
+
+    # if post
     if request.method == "POST":
         if request.POST['edit_mode'] == 'True':
+            # create the form from a recipe instance if editing
             recipe_id = int(request.POST['recipe'])
             recipe = Recipe.objects.get(pk=recipe_id)
             form = RecipeForm(request.POST, request.FILES, instance=recipe)
+            if form.is_valid():
+                recipe = form.save()
         else:
             form = RecipeForm(request.POST, request.FILES)
-        if form.is_valid():
-            recipe = form.save(commit=False)
-            recipe.author = request.user
-            recipe.date = timezone.now()
-            recipe.save()
-            form.save_m2m()
-            return redirect('/')
+            if form.is_valid():
+                recipe = form.save(commit=False)
+                recipe.author = request.user
+                recipe.date = timezone.now()
+                recipe.save()
+                form.save_m2m()  # create ingredient relations
+        return redirect('/recipe_detail?recipe=' + str(recipe.id))
+
+    # if get
     elif 'recipe' in request.GET:
         recipe_id = int(request.GET['recipe'])
         recipe = Recipe.objects.get(pk=recipe_id)
