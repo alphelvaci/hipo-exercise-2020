@@ -47,7 +47,7 @@
                     <h4>Most Used Ingredients</h4>
                     <ol>
                         {% for ingredient in ingredients %}
-                            <li><a href="/?ingredient={{ ingredient.name }}">
+                            <li><a href="/?ingredient={{ ingredient.slug }}">
                                 {{ ingredient.name }}
                                 ({{ ingredient.use_count }})
                                 </a>

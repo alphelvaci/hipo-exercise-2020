@@ -2,10 +2,12 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.db.models import Count
+from django_extensions.db.fields import AutoSlugField
 
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=20, null=False, blank=False)
+    slug = AutoSlugField(populate_from='name', overwrite=True)
 
     def __str__(self):
         return self.name

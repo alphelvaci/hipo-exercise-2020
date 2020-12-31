@@ -34,7 +34,8 @@ class index(View):
         # get the html GET parameters
         if 'ingredient' in request.GET:  # filter
             filter_ingredient = request.GET['ingredient']
-            recipes = recipes.filter(ingredients__name=filter_ingredient)
+            recipes = recipes.filter(ingredients__slug=filter_ingredient)
+            filter_ingredient = get_object_or_404(Ingredient, slug=filter_ingredient)
 
         elif 'search_keyword' in request.GET:  # search
             search_keyword = request.GET['search_keyword']
