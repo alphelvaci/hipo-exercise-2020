@@ -1,0 +1,23 @@
+<div class="recipe">
+    <h2><a href="/recipe_detail?recipe={{ recipe.id }}">{{ recipe.title }}</a></h2>
+    <div class="date-author">
+        {{ recipe.date.date }}
+        by {{ recipe.author }}
+    </div>
+    {% if user == recipe.author %}
+        <a href="/post_recipe?recipe={{ recipe.id }}">Edit</a><br>
+    {% else %}
+        <br>
+    {% endif %}
+    <a href="/recipe_detail?recipe={{ recipe.id }}"><img src="{{ recipe.image.url }}"></a>
+    <h4>Difficulty:</h4>
+    <p>{{ recipe.difficulty }}</p>
+    <h4>Ingredients:</h4>
+    <ul>
+        {% for ingredient in recipe.ingredients.all %}
+            <li>{{ ingredient }}</li>
+        {% endfor %}
+    </ul>
+    <h4>Instructions:</h4>
+    {{ recipe.instructions }}
+</div>
