@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="{% static 'css/footer.css' %}">
     <link rel="stylesheet" href="{% static 'css/recipe.css' %}">
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <link href="{% static 'plugins/css/ace.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+    <link href="{% static 'plugins/css/resizable.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+    <link href="{% static 'martor/css/martor.bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet" />
 {% endblock %}
 
 {% block header-subheading %}
@@ -62,4 +65,13 @@
         <a class="nav-buttons-inner" href="/?page={{ next_page }}">Next</a>
         <a class="nav-buttons-outer" href="/?page={{ last_page }}">Last</a>
     {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{% static 'plugins/js/highlight.min.js' %}"></script>
+    <script>
+        $('.martor-preview pre').each(function(i, block){
+            hljs.highlightBlock(block);
+        });
+    </script>
 {% endblock %}

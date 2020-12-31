@@ -26,6 +26,27 @@ LOGOUT_REDIRECT_URL = '/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
+# Martor markdown editor settings
+
+MARTOR_THEME = 'bootstrap'  # semantic
+MARTOR_ENABLE_LABEL = True
+
+MARTOR_ENABLE_CONFIGS = {
+    'emoji': 'true',        # to enable/disable emoji icons.
+    'imgur': 'false',        # to enable/disable imgur/custom uploader.
+    'mention': 'false',      # to enable/disable mention
+    'jquery': 'true',       # to include/revoke jquery (require for admin default django)
+    'living': 'false',      # to enable/disable live updates in preview
+    'spellcheck': 'false',  # to enable/disable spellcheck in form textareas
+    'hljs': 'true',         # to enable/disable hljs highlighting in preview
+}
+
+MARTOR_TOOLBAR_BUTTONS = [
+    'bold', 'italic', 'horizontal', 'heading', 'pre-code',
+    'blockquote', 'unordered-list', 'ordered-list',
+    'link', 'emoji', 'toggle-maximize', 'help'
+]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,6 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'django_extensions',
     'crispy_forms',
+    'martor',
     'recipes.apps.RecipesConfig',
 ]
 

@@ -3,6 +3,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.db.models import Count
 from django_extensions.db.fields import AutoSlugField
+from martor.models import MartorField
 
 
 class Ingredient(models.Model):
@@ -23,7 +24,7 @@ class Recipe(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     image = models.ImageField(upload_to='%Y/%m/')
-    instructions = models.TextField()
+    instructions = MartorField()
     difficulty_choices = [
         (EASY, 'Easy'),
         (MEDIUM, 'Medium'),

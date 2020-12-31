@@ -19,5 +19,6 @@
         {% endfor %}
     </ul>
     <h4>Instructions:</h4>
-    {{ recipe.instructions }}
+    {% load martortags %}
+    {{ recipe.instructions|safe_markdown }}
 </div>
