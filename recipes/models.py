@@ -17,16 +17,19 @@ class Ingredient(models.Model):
 
 
 class Recipe(models.Model):
+    EASY = 'easy'
+    MEDIUM = 'medium'
+    HARD = 'hard'
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     image = models.ImageField(upload_to='%Y/%m/')
     instructions = models.TextField()
     difficulty_choices = [
-        ('Easy', 'Easy'),
-        ('Medium', 'Medium'),
-        ('Hard', 'Hard'),
+        (EASY, 'Easy'),
+        (MEDIUM, 'Medium'),
+        (HARD, 'Hard'),
     ]
-    difficulty = models.CharField(max_length=10, choices=difficulty_choices, default="easy")
+    difficulty = models.CharField(max_length=10, choices=difficulty_choices, default=EASY)
     ingredients = models.ManyToManyField(Ingredient)
     date = models.DateTimeField(default=timezone.now)
 
