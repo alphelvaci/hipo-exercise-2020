@@ -21,10 +21,8 @@
                 {% csrf_token %}
                 <input hidden type='text' name='edit_mode' value="{{ edit_mode }}"/>
                 <input hidden type='text' name='recipe' value="{{ recipe.id }}"/>
-                {% for field in form %}
-                    <h4>{{ field.label }}:</h4>
-                    {{ field }}
-                {% endfor %} <br>
+                {% load crispy_forms_tags %}
+                {{ form|crispy }}
                 <button type="submit" class="save-button">Save</button>
             </form>
         </div>
