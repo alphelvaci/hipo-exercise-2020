@@ -6,10 +6,10 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.http import Http404
-from django.views.generic import ArchiveIndexView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 
-class index(ArchiveIndexView):
+class Index(ListView):
     date_field = 'date'
     paginate_by = 3
     context_object_name = 'recipes'
@@ -46,14 +46,14 @@ class index(ArchiveIndexView):
         context['user'] = self.request.user
         context['search_form'] = SearchForm
         context['ingredients'] = Ingredient.objects.annotate(count=Count('recipe')).order_by('-count')[:5]
-        context['footer_page_range'] = set(context['paginator'].page_range) & set(range(context['page_obj'].number-2, context['page_obj'].number+3))
+        context['footer_page_range'] = sorted(set(context['paginator'].page_range) & set(range(context['page_obj'].number-2, context['page_obj'].number+3)))
         return context
 
     def post(self, request):  # when search form is submitted
         return redirect('/?search_keyword=' + request.POST['search_keyword'])
 
 
-class recipe_detail(DetailView):
+class RecipeDetail(DetailView):
     model = Recipe
     template_name = 'recipes/recipe_detail.html'
 
@@ -69,7 +69,7 @@ class recipe_detail(DetailView):
 
 @method_decorator(login_required, name='get')
 @method_decorator(login_required, name='post')
-class create_recipe(CreateView):
+class CreateRecipe(CreateView):
     model = Recipe
     form_class = RecipeForm
     template_name = 'recipes/post_recipe.html'
@@ -85,7 +85,7 @@ class create_recipe(CreateView):
 
 @method_decorator(login_required, name='get')
 @method_decorator(login_required, name='post')
-class edit_recipe(UpdateView):
+class EditRecipe(UpdateView):
     form_class = RecipeForm
     template_name = 'recipes/post_recipe.html'
     success_url = 'recipes/'

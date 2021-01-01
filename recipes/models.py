@@ -18,19 +18,19 @@ class Ingredient(models.Model):
 
 
 class Recipe(models.Model):
-    EASY = 'easy'
-    MEDIUM = 'medium'
-    HARD = 'hard'
+    DIFFICULTY_CHOICE_EASY = 'easy'
+    DIFFICULTY_CHOICE_MEDIUM = 'medium'
+    DIFFICULTY_CHOICE_HARD = 'hard'
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     image = models.ImageField(upload_to='%Y/%m/')
     instructions = MartorField()
     difficulty_choices = [
-        (EASY, 'Easy'),
-        (MEDIUM, 'Medium'),
-        (HARD, 'Hard'),
+        (DIFFICULTY_CHOICE_EASY, 'Easy'),
+        (DIFFICULTY_CHOICE_MEDIUM, 'Medium'),
+        (DIFFICULTY_CHOICE_HARD, 'Hard'),
     ]
-    difficulty = models.CharField(max_length=10, choices=difficulty_choices, default=EASY)
+    difficulty = models.CharField(max_length=10, choices=difficulty_choices, default=DIFFICULTY_CHOICE_EASY)
     ingredients = models.ManyToManyField(Ingredient)
     date = models.DateTimeField(default=timezone.now)
 

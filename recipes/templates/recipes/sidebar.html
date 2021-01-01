@@ -2,9 +2,9 @@
     <h4>Search</h4>
     <form method="POST" class="search-form">
         {% csrf_token %}
-        {% for field in search_form %}
-            {{ field }}
-        {% endfor %}
+        {{ search_form.non_field_errors }}
+        {{ search_form.search_keyword.errors }}
+        {{ search_form.search_keyword }}
         <button type="submit">Go</button>
     </form>
 </div>
@@ -21,5 +21,5 @@
     </ol>
 </div>
 <div class="sidebar-post">
-    <h4><a href="/create_recipe">Share a New Recipe</a></h4>
+    <h4><a href="/recipe/create">Share a New Recipe</a></h4>
 </div>

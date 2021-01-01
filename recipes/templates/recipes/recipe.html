@@ -5,7 +5,7 @@
         by {{ recipe.author }}
     </div>
     {% if user == recipe.author %}
-        <a href="/edit_recipe/{{ recipe.id }}">Edit</a><br>
+        <a href="/recipe/{{ recipe.id }}/edit">Edit</a><br>
     {% else %}
         <br>
     {% endif %}
