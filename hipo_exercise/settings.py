@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'django_extensions',
+    'qurl_templatetag',
     'crispy_forms',
     'martor',
     'recipes.apps.RecipesConfig',

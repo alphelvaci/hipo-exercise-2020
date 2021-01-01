@@ -18,8 +18,8 @@
     {% if filter_ingredient %}
         <h4>Filter By: {{ filter_ingredient }}</h4>
     {% endif %}
-    {% if page > 1 %}
-        <h4>Page: {{ page }}</h4>
+    {% if page_obj.number > 1 %}
+        <h4>Page: {{ page_obj.number }}</h4>
     {% endif %}
 {% endblock %}
 
@@ -44,27 +44,26 @@
 {% endblock %}
 
 {% block footer %}
-    {% if filter_ingredient %}
-        <a class="nav-buttons-outer" href="/?ingredient={{ filter_ingredient }}">First</a>
-        <a class="nav-buttons-inner" href="/?ingredient={{ filter_ingredient }}&page={{ prev_page }}">Previous</a>
+    {% load qurl %}
+    <a class="nav-buttons-outer" href="{% qurl request.get_full_path page=None %}">First</a>
+    {% if page_obj.has_previous %}
+        <a class="nav-buttons-inner" href="{% qurl request.get_full_path page=page_obj.previous_page_number %}">Previous</a>
     {% else %}
-        <a class="nav-buttons-outer" href="/">First</a>
-        <a class="nav-buttons-inner" href="/?page={{ prev_page }}">Previous</a>
+        <a class="nav-buttons-inner" href="{% qurl request.get_full_path page=None %}">Previous</a>
     {% endif %}
-    {% for i in page_range %}
-        {% if i == page %}
+    {% for i in footer_page_range %}
+        {% if i == page_obj.number %}
             <p class="nav-buttons-pages">{{ i }}</p>
         {% else %}
             <a class="nav-buttons-pages" href="/?page={{ i }}">{{ i }}</a>
         {% endif %}
     {% endfor %}
-    {% if filter_ingredient %}
-        <a class="nav-buttons-inner" href="/?ingredient={{ filter_ingredient }}&page={{ next_page }}">Next</a>
-        <a class="nav-buttons-outer" href="/?ingredient={{ filter_ingredient }}&page={{ last_page }}">Last</a>
+    {% if page_obj.has_next %}
+        <a class="nav-buttons-inner" href="{% qurl request.get_full_path page=page_obj.next_page_number %}">Next</a>
     {% else %}
-        <a class="nav-buttons-inner" href="/?page={{ next_page }}">Next</a>
-        <a class="nav-buttons-outer" href="/?page={{ last_page }}">Last</a>
+        <a class="nav-buttons-inner" href="{% qurl request.get_full_path page=paginator.num_pages %}">Next</a>
     {% endif %}
+    <a class="nav-buttons-outer" href="{% qurl request.get_full_path page=paginator.num_pages %}">Last</a>
 {% endblock %}
 
 {% block scripts %}
