@@ -16,7 +16,13 @@
             {% csrf_token %}
             {% load crispy_forms_tags %}
             {{ form|crispy }}
-            <button type="submit">Login</button>
+            <p>
+                <a href="/register">Register</a> —
+                <a href="/forgot">Forgot password?</a>
+            </p>
+            <div class="form-button-container">
+                <button type="submit">Login</button>
+            </div>
         </form>
     </div>
 {% endblock %}
