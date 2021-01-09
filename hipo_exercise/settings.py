@@ -22,6 +22,10 @@ LOGIN_REDIRECT_URL = '/'
 
 LOGOUT_REDIRECT_URL = '/'
 
+# Email backend settings
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = str(BASE_DIR.joinpath('sent_emails'))
+
 # Crispy forms settings
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -50,6 +54,7 @@ MARTOR_TOOLBAR_BUTTONS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'recipes.apps.RecipesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -61,7 +66,6 @@ INSTALLED_APPS = [
     'qurl_templatetag',
     'crispy_forms',
     'martor',
-    'recipes.apps.RecipesConfig',
 ]
 
 MIDDLEWARE = [

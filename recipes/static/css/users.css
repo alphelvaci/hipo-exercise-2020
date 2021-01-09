@@ -4,6 +4,19 @@
     padding-top: 50px;
 }
 
-form button {
-    margin: 20px 0px 0px 160px;
+form p {
+    text-align: center;
+}
+
+.form-button-container {
+    display: flex;
+    width: 400px;
+}
+
+button {
+    margin: auto;
+}
+
+.link-expired {
+    margin: 0px 0px 0px 100px;
 }

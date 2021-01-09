@@ -12,4 +12,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('register/', views.Register.as_view(), name='register'),
+    path('forgot/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('forgot/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('forgot/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(success_url='/login'), name='password_reset_confirm'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
