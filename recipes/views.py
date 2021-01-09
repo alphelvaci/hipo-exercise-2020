@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, get_object_or_404
 from .models import Ingredient, Recipe
 from django.db.models import Count
-from .forms import RecipeForm, SearchForm
+from .forms import RecipeForm, SearchForm, CustomUserCreationForm
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -100,3 +100,16 @@ class EditRecipe(UpdateView):
     def form_valid(self, form):
         recipe = form.save()
         return redirect('/recipe/' + str(recipe.id))
+
+
+class Register(CreateView):
+    form_class = CustomUserCreationForm
+    template_name = 'registration/regisration.html'
+    success_url = '/login'
+    redirect_authenticated_user = True
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('/')
+        else:
+            return super(Register, self).get(request, *args, **kwargs)

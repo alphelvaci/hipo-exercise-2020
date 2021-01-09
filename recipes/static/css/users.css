@@ -1,0 +1,9 @@
+.user-form-container {
+    width: 400px;
+    margin: auto;
+    padding-top: 50px;
+}
+
+form button {
+    margin: 20px 0px 0px 160px;
+}

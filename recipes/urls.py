@@ -11,4 +11,5 @@ urlpatterns = [
     path('recipe/<int:pk>/edit/', views.EditRecipe.as_view(), name='edit_recipe'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('register/', views.Register.as_view(), name='register'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
