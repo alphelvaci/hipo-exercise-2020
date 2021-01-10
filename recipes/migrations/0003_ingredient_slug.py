@@ -7,7 +7,7 @@ import django_extensions.db.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('recipes', '0002_auto_20201214_1737'),
+        ('recipes', '0002_auto_20201215_0322'),
     ]
 
     operations = [
