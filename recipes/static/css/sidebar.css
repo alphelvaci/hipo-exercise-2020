@@ -1,0 +1,17 @@
+.page-sidebar {
+    width: 350px;
+    padding: 10px 0px 0px 0px;
+}
+
+.page-sidebar div {
+    padding: 10px 10px 10px 20px;
+    margin: 10px 0px 10px 0px;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10px;
+    border-color: #8456b34d;
+}
+
+.page-sidebar input {
+    border-color: #8456b34d;
+}

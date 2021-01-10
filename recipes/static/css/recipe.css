@@ -1,0 +1,26 @@
+.recipe {
+    max-width: 700px;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10px;
+    padding: 20px 20px 20px 30px;
+    margin: 20px 0px 20px 0px;
+    border-color: #8456b34d;
+}
+
+.recipe h2 {
+    display: inline-block;
+}
+
+.recipe .date-author {
+    display: inline;
+    padding: 0px 5px 0px 5px;
+}
+
+.recipe img {
+    width: 100%;
+    max-width: 400px;
+    margin: 5px 0px 10px 0px;
+    border-radius: 10px;
+}
+

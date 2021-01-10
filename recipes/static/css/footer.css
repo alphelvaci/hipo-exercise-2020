@@ -1,0 +1,29 @@
+.page-footer {
+    display: flex;
+    float: bottom;
+    padding: 20px 0px 20px 0px;
+    justify-content: center;
+    background-color: #7356ad;
+}
+
+.page-footer p {
+    font-size: 13pt;
+    display: inline;
+}
+
+.page-footer a {
+    font-size: 13pt;
+    color: #ffffff;
+}
+
+.nav-buttons-pages {
+    margin: 0px 5px 0px 5px;
+}
+
+.nav-buttons-inner {
+    margin: 0px 25px 0px 25px;
+}
+
+.nav-buttons-outer {
+    margin: 0px 10px 0px 10px;
+}

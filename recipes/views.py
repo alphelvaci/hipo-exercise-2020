@@ -1,133 +1,103 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, get_object_or_404
 from .models import Ingredient, Recipe
 from django.db.models import Count
 from .forms import RecipeForm, SearchForm
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from .functions import calculate_page_params
+from django.utils.decorators import method_decorator
+from django.http import Http404
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.urls import reverse
 
 
-def index(request):
-    if request.method == "POST":  # when search form is submitted
-        return redirect('/?search_keyword=' + request.POST['search_keyword'])
+class Index(ListView):
+    date_field = 'date'
+    paginate_by = 3
+    context_object_name = 'recipes'
+    template_name = 'recipes/index.html'
 
-    # set default values
-    page = 1
-    filter_ingredient = None
-    search_keyword = None
-
-    # get the html GET parameters
-    if 'page' in request.GET:
-        page = int(request.GET['page'])
-
-    if 'ingredient' in request.GET:  # filter
-        filter_ingredient = request.GET['ingredient']
-        recipes = Recipe.objects.filter(ingredients__name=filter_ingredient).order_by('-date')[(page-1)*3:page*3]
-        recipe_count = Recipe.objects.filter(ingredients__name=filter_ingredient).count()
-    elif 'search_keyword' in request.GET:  # search
+    def recipe_search(self, recipes, search_keyword):
         # get all the possible matches
-        search_keyword = request.GET['search_keyword']
-        author_matches = Recipe.objects.filter(author__username__unaccent__icontains=search_keyword)
-        title_matches = Recipe.objects.filter(title__unaccent__icontains=search_keyword)
-        instruction_matches = Recipe.objects.filter(instructions__unaccent__icontains=search_keyword)
-        difficulty_matches = Recipe.objects.filter(difficulty__unaccent__icontains=search_keyword)
-        ingredient_matches = Recipe.objects.filter(ingredients__name__unaccent__icontains=search_keyword)
+        author_matches = recipes.filter(author__username__unaccent__icontains=search_keyword)
+        title_matches = recipes.filter(title__unaccent__icontains=search_keyword)
+        instruction_matches = recipes.filter(instructions__unaccent__icontains=search_keyword)
+        difficulty_matches = recipes.filter(difficulty__unaccent__icontains=search_keyword)
+        ingredient_matches = recipes.filter(ingredients__name__unaccent__icontains=search_keyword)
         # combine all the matches with the OR operator. use .distinct() to avoid duplicates
-        recipes = (author_matches | title_matches | instruction_matches | difficulty_matches | ingredient_matches).distinct().order_by('-date')[(page-1)*3:page*3]
-        recipe_count = (author_matches | title_matches | instruction_matches | difficulty_matches | ingredient_matches).distinct().count()
-    else:
-        recipes = Recipe.objects.order_by('-date')[(page-1)*3:page*3]
-        recipe_count = Recipe.objects.count()
+        recipes = (author_matches | title_matches | instruction_matches | difficulty_matches | ingredient_matches
+                   ).distinct().order_by('-date')
+        return recipes
 
-    ingredients = Ingredient.objects.annotate(count=Count('recipe')).order_by('-count')[:5]
+    def get_queryset(self):
+        queryset = Recipe.objects.order_by('-date')
+        if 'ingredient' in self.request.GET:  # filter
+            filter_ingredient = self.request.GET['ingredient']
+            queryset = Recipe.objects.filter(ingredients__slug=filter_ingredient).order_by('-date')
+        elif 'search_keyword' in self.request.GET:  # search
+            search_keyword = self.request.GET['search_keyword']
+            queryset = self.recipe_search(queryset, search_keyword)
+        return queryset
 
-    for recipe in recipes:  # split instructions into lines
-        recipe.instructions = recipe.instructions.split('\r\n')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if 'ingredient' in self.request.GET:
+            context['filter_ingredient'] = get_object_or_404(Ingredient, slug=self.request.GET['ingredient'])
+        elif 'search_keyword' in self.request.GET:
+            context['search_keyword'] = self.request.GET['search_keyword']
+        context['user'] = self.request.user
+        context['search_form'] = SearchForm
+        context['ingredients'] = Ingredient.objects.annotate(count=Count('recipe')).order_by('-count')[:5]
+        context['footer_page_range'] = sorted(set(context['paginator'].page_range) & set(range(context['page_obj'].number-2, context['page_obj'].number+3)))
+        return context
 
-    # calculate variables used for page navigation
-    page_params = calculate_page_params(recipe_count, page)
-    prev_page = page_params['prev_page']
-    next_page = page_params['next_page']
-    last_page = page_params['last_page']
-    page_range = page_params['page_range']
-
-    return render(
-        request, 'recipes/index.html',
-        {
-            'recipes': recipes,
-            'ingredients': ingredients,
-            'page': page,
-            'page_range': page_range,
-            'prev_page': prev_page,
-            'next_page': next_page,
-            'last_page': last_page,
-            'filter_ingredient': filter_ingredient,
-            'search_form': SearchForm,
-            'search_keyword': search_keyword,
-            'user': request.user,
-        }
-    )
-
-
-def recipe_detail(request):
-    if request.method == "POST":
+    def post(self, request):  # when search form is submitted
         return redirect('/?search_keyword=' + request.POST['search_keyword'])
 
-    if 'recipe' in request.GET:
-        recipe_id = int(request.GET['recipe'])
-        recipe = Recipe.objects.get(pk=recipe_id)
-        recipe.instructions = recipe.instructions.split('\r\n')
-        ingredients = Ingredient.objects.annotate(count=Count('recipe')).order_by('-count')[:5]
-    else:
-        return render(request, '404.html')
 
-    return render(
-        request, 'recipes/recipe_detail.html',
-        {
-            'recipe': recipe,
-            'ingredients': ingredients,
-            'search_form': SearchForm,
-        }
-    )
+class RecipeDetail(DetailView):
+    model = Recipe
+    template_name = 'recipes/recipe_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_form'] = SearchForm
+        context['ingredients'] = Ingredient.objects.annotate(count=Count('recipe')).order_by('-count')[:5]
+        return context
+
+    def post(self, request):
+        return redirect('/?search_keyword=' + request.POST['search_keyword'])
 
 
-@login_required
-def post_recipe(request):
-    edit_mode = False
-    recipe = None
+@method_decorator(login_required, name='get')
+@method_decorator(login_required, name='post')
+class CreateRecipe(CreateView):
+    model = Recipe
+    form_class = RecipeForm
+    template_name = 'recipes/post_recipe.html'
 
-    # if post
-    if request.method == "POST":
-        if request.POST['edit_mode'] == 'True':
-            # create the form from a recipe instance if editing
-            recipe_id = int(request.POST['recipe'])
-            recipe = Recipe.objects.get(pk=recipe_id)
-            form = RecipeForm(request.POST, request.FILES, instance=recipe)
-            if form.is_valid():
-                recipe = form.save()
+    def form_valid(self, form):
+        recipe = form.save(commit=False)
+        recipe.author = self.request.user
+        recipe.date = timezone.now()
+        recipe.save()
+        form.save_m2m()  # create ingredient relations
+        return redirect(reverse('recipe_detail', args=[str(recipe.id)]))
+
+
+@method_decorator(login_required, name='get')
+@method_decorator(login_required, name='post')
+class EditRecipe(UpdateView):
+    form_class = RecipeForm
+    template_name = 'recipes/post_recipe.html'
+    success_url = 'recipes/'
+
+    def get_queryset(self):
+        queryset = Recipe.objects.all()
+        if get_object_or_404(queryset, pk=self.kwargs['pk']).author == self.request.user:
+            return queryset
         else:
-            form = RecipeForm(request.POST, request.FILES)
-            if form.is_valid():
-                recipe = form.save(commit=False)
-                recipe.author = request.user
-                recipe.date = timezone.now()
-                recipe.save()
-                form.save_m2m()  # create ingredient relations
-        return redirect('/recipe_detail?recipe=' + str(recipe.id))
+            raise Http404
 
-    # if get
-    elif 'recipe' in request.GET:
-        recipe_id = int(request.GET['recipe'])
-        recipe = Recipe.objects.get(pk=recipe_id)
-        form = RecipeForm(instance=recipe)
-        edit_mode = True
-    else:
-        form = RecipeForm()
-    return render(
-        request, 'recipes/post_recipe.html',
-        {
-            'form': form,
-            'edit_mode': edit_mode,
-            'recipe': recipe,
-        }
-    )
+    def form_valid(self, form):
+        recipe = form.save()
+        return redirect(reverse('recipe_detail', args=[str(recipe.id)]))

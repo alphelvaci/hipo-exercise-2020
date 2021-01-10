@@ -1,4 +1,12 @@
 asgiref==3.3.1
+idna==2.10
+Markdown==3.3.3
+martor==1.5.8
+django-qurl-templatetag==0.0.14
+django-extensions==3.1.0
+django-crispy-forms==1.10.0
+chardet==4.0.0
+certifi==2020.12.5
 boto3==1.16.47
 botocore==1.19.46
 Django==3.1.4
@@ -11,6 +19,7 @@ Pillow==8.1.0
 psycopg2==2.8.6
 pycodestyle==2.6.0
 pyflakes==2.2.0
+requests==2.25.1
 python-dateutil==2.8.1
 pytz==2020.5
 s3transfer==0.3.3

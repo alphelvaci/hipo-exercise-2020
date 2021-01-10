@@ -1,0 +1,25 @@
+<div class="sidebar-search">
+    <h4>Search</h4>
+    <form method="POST" class="search-form">
+        {% csrf_token %}
+        {{ search_form.non_field_errors }}
+        {{ search_form.search_keyword.errors }}
+        {{ search_form.search_keyword }}
+        <button type="submit">Go</button>
+    </form>
+</div>
+<div class="sidebar-ingredients">
+    <h4>Most Used Ingredients</h4>
+    <ol>
+        {% for ingredient in ingredients %}
+            <li><a href="/?ingredient={{ ingredient.slug }}">
+                {{ ingredient.name }}
+                ({{ ingredient.use_count }})
+                </a>
+            </li>
+        {% endfor %}
+    </ol>
+</div>
+<div class="sidebar-post">
+    <h4><a href="/recipe/create">Share a New Recipe</a></h4>
+</div>
