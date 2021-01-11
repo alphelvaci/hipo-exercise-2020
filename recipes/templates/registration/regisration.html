@@ -2,26 +2,22 @@
 {% load static %}
 
 {% block head %}
-    <title>Login - Recipes</title>
+    <title>Registration - Recipes</title>
     <link rel="stylesheet" href="{% static 'css/users.css' %}">
 {% endblock %}
 
 {% block header-subheading %}
-    <h4>Login</h4>
+    <h4>Registration</h4>
 {% endblock %}
 
 {% block content %}
     <div class="user-form-container">
-        <form method="POST" class="login-form">
+        <form method="POST" class="registration-form">
             {% csrf_token %}
             {% load crispy_forms_tags %}
             {{ form|crispy }}
-            <p>
-                <a href="/register">Register</a> —
-                <a href="/forgot">Forgot password?</a>
-            </p>
             <div class="form-button-container">
-                <button type="submit">Login</button>
+                <button type="submit">Register</button>
             </div>
         </form>
     </div>

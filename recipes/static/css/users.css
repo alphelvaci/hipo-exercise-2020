@@ -1,0 +1,22 @@
+.user-form-container {
+    width: 400px;
+    margin: auto;
+    padding-top: 50px;
+}
+
+form p {
+    text-align: center;
+}
+
+.form-button-container {
+    display: flex;
+    width: 400px;
+}
+
+button {
+    margin: auto;
+}
+
+.link-expired {
+    margin: 0px 0px 0px 100px;
+}

@@ -21,6 +21,13 @@ LOGIN_REDIRECT_URL = '/'
 
 LOGOUT_REDIRECT_URL = '/'
 
+# Email backend settings
+
+DEFAULT_FROM_EMAIL = 'hipo-exercise@alphelvaci.com'
+EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_SES_REGION_NAME = 'eu-west-1'
+AWS_SES_REGION_ENDPOINT = 'email.eu-west-1.amazonaws.com'
+
 # Crispy forms settings
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -49,6 +56,7 @@ MARTOR_TOOLBAR_BUTTONS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'recipes.apps.RecipesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,7 +68,6 @@ INSTALLED_APPS = [
     'qurl_templatetag',
     'crispy_forms',
     'martor',
-    'recipes.apps.RecipesConfig',
 ]
 
 MIDDLEWARE = [
