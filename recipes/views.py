@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.http import Http404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.urls import reverse
 
 
 class Index(ListView):
@@ -80,7 +81,7 @@ class CreateRecipe(CreateView):
         recipe.date = timezone.now()
         recipe.save()
         form.save_m2m()  # create ingredient relations
-        return redirect('/recipe/' + str(recipe.id))
+        return redirect(reverse('recipe_detail', args=[str(recipe.id)]))
 
 
 @method_decorator(login_required, name='get')
@@ -99,7 +100,7 @@ class EditRecipe(UpdateView):
 
     def form_valid(self, form):
         recipe = form.save()
-        return redirect('/recipe/' + str(recipe.id))
+        return redirect(reverse('recipe_detail', args=[str(recipe.id)]))
 
 
 class Register(CreateView):
